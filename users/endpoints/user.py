@@ -9,6 +9,12 @@ def create(request: schema.User, db: Session):
     db.add(user)
     db.commit()
     db.refresh(user)
+    leaderboard = models.LeaderBoard(
+        team=request.name, played=0, won=0, lose=0, points=0
+    )
+    db.add(leaderboard)
+    db.commit()
+    db.refresh(leaderboard)
     return user
 
 

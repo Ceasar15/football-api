@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     nickname = Column(String)
@@ -12,16 +12,17 @@ class User(Base):
 
 
 class LeaderBoard(Base):
-    __tablename__ = 'leaderboard'
+    __tablename__ = "leaderboard"
     id = Column(Integer, primary_key=True, index=True)
+    team = Column(String)
     played = Column(Integer)
     won = Column(Integer)
     lose = Column(Integer)
-    user_id = Column(Integer, ForeignKey("user.id"))
+    points = Column(Integer)
 
 
 class StatsSheet(Base):
-    __tablename__ = 'stats_sheet'
+    __tablename__ = "stats_sheet"
     id = Column(Integer, primary_key=True, index=True)
     home_team = Column(String)
     away_team = Column(String)
@@ -36,4 +37,5 @@ class StatsSheet(Base):
     home_team_red_cards = Column(Integer)
     away_team_red_cards = Column(Integer)
 
-Base.metadata.create_all(engine, Base.metadata.tables.values(),checkfirst=True)
+
+Base.metadata.create_all(engine, Base.metadata.tables.values(), checkfirst=True)

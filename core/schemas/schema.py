@@ -16,10 +16,11 @@ class User(UserBase):
 
 class LeaderBoardBase(BaseModel):
     id: int
+    team: str
     played: int
     won: int
     lose: int
-    user_id: str
+    points: int
 
     class Config():
         orm_mode = True

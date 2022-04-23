@@ -18,7 +18,7 @@ def create_user(request: schema.LeaderBoardBase, db: Session = Depends(get_db)):
     return api.create(request, db)
 
 # Get all leaderboard
-@router.get("/all-leaderboard", status_code=status.HTTP_200_OK, response_model=List[schema.LeaderBoardBase])
+@router.get("/all-leaderboard", status_code=status.HTTP_200_OK, response_model=List[schema.StatsSheetSchema])
 def get_users(db: Session = Depends(get_db)):
     return api.get_leaderboard(db)
 

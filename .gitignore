@@ -1,7 +1,8 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,python,git,virtualenv,linux,database
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,python,git,virtualenv,linux,database
-
+.vscode
+vscode
 ### Database ###
 *.accdb
 *.db
