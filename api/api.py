@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from core.schemas import schema
 from core.models import models
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 
 
 # Get leaderboard
@@ -89,15 +89,81 @@ def create_stats_per_game(request: schema.StatsSheetSchema, db: Session):
     return stats_per_game
 
 
+def delete_stats_per_game(stats_per_game_id: int, db: Session):
+    # check if teams exists in db
+    get_game = db.query(models.StatsSheet).get(stats_per_game_id)
+    if not get_game:
+        raise HTTPException(status_code=404, detail="This game does not exist")
+    home_team_leaderboard = (
+        db.query(models.LeaderBoard)
+            .filter(models.LeaderBoard.team == get_game.home_team)
+            .first()
+    )
+    if not home_team_leaderboard:
+        raise HTTPException(status_code=404, detail="Home Team data not found")
+    away_team_leaderboard = (
+        db.query(models.LeaderBoard)
+            .filter(models.LeaderBoard.team == get_game.away_team)
+            .first()
+    )
+    print(33, away_team_leaderboard)
+    if not away_team_leaderboard:
+        raise HTTPException(status_code=404, detail="Away Team data not found")
+
+    # decrese game played
+    home_team_leaderboard.played -= 1
+    away_team_leaderboard.played -= 1
+    #  calculate goals scored for, against and difference
+    home_team_leaderboard.goals_for -= int(get_game.home_team_goals)
+    away_team_leaderboard.goals_for -= int(get_game.away_team_goals)
+    home_team_leaderboard.goals_against -= int(get_game.away_team_goals)
+    away_team_leaderboard.goals_against -= int(get_game.home_team_goals)
+
+    # check for wins and losses
+    if get_game.home_team_goals > get_game.away_team_goals:
+        home_team_leaderboard.won -= 1
+        home_team_leaderboard.points -= 3
+        away_team_leaderboard.lose -= 1
+    elif get_game.home_team_goals < get_game.away_team_goals:
+        away_team_leaderboard.won -= 1
+        away_team_leaderboard.points -= 3
+        home_team_leaderboard.lose -= 1
+    else:
+        home_team_leaderboard.points -= 1
+        away_team_leaderboard.points -= 1
+        home_team_leaderboard.draw -= 1
+        away_team_leaderboard.draw -= 1
+
+    db.add_all([home_team_leaderboard, away_team_leaderboard])
+    db.commit()
+    db.refresh(home_team_leaderboard)
+    home_team_leaderboard.goals_difference = (
+            home_team_leaderboard.goals_for - home_team_leaderboard.goals_against
+    )
+    away_team_leaderboard.goals_difference = (
+            away_team_leaderboard.goals_for - away_team_leaderboard.goals_against
+    )
+
+    db.add_all([home_team_leaderboard, away_team_leaderboard])
+    db.commit()
+    db.refresh(away_team_leaderboard)
+    db.delete(get_game)
+    return 'Deleteed Successfully'
+
+
 def get_all_stats(db: Session):
     all_stats = db.query(models.StatsSheet).all()
     return all_stats
 
 
-def get_game_stats_of_a_team(db: Session):
-    team_stats = db.query(models.StatsSheet.home_team).filter(
-        models.StatsSheet.home_team == "Team One"
-    ).first()
+def get_game_stats_of_a_team(team_name, db: Session):
+    team_stats = db.query(models.StatsSheet).filter(
+        (models.StatsSheet.home_team == team_name) |
+        (models.StatsSheet.away_team == team_name)
+    ).all()
+    # team_stats = db.query(models.StatsSheet.home_team).filter_by(
+    #     home_team="Team One"
+    # ).with_entities(models.StatsSheet).all()
     if not team_stats:
         raise HTTPException(status_code=404, detail="Team data not found")
     return team_stats

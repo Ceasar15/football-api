@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime, time, timedelta
 
 
 class UserBase(BaseModel):
@@ -48,7 +50,20 @@ class StatsSheetSchema(BaseModel):
 
 
 class ShowStatsSheet(BaseModel):
-    home_team: str
+    id: Optional[int]
+    home_team: Optional[str]
+    away_team: Optional[str]
+    home_team_goals: Optional[int]
+    away_team_goals: Optional[int]
+    time_created: Optional[datetime]
+    home_team_possession: Optional[int]
+    away_team_possession: Optional[int]
+    home_team_fouls: Optional[int]
+    away_team_fouls: Optional[int]
+    home_team_yellow_cards: Optional[int]
+    away_team_yellow_cards: Optional[int]
+    home_team_red_cards: Optional[int]
+    away_team_red_cards: Optional[int]
 
     class Config:
         orm_mode = True
