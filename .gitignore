@@ -3,6 +3,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,python,git,virtualenv,linux,database
 .vscode
 vscode
+.idea
+.idea/
 ### Database ###
 *.accdb
 *.db
