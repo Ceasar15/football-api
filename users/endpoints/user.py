@@ -10,6 +10,7 @@ def create(request: schema.User, db: Session):
     db.add(user)
     db.commit()
     db.refresh(user)
+    new_user = db.query(models.User).filter(models.User.name == request.name).first()
     leaderboard = models.LeaderBoard(
         team=request.name,
         played=0,
@@ -20,7 +21,9 @@ def create(request: schema.User, db: Session):
         goals_against=0,
         goals_difference=0,
         points=0,
+        user_id=new_user.id
     )
+
     db.add(leaderboard)
     db.commit()
     db.refresh(leaderboard)

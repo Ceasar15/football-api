@@ -96,6 +96,19 @@ def get_all_stats(db: Session):
 
 def get_game_stats_of_a_team(db: Session):
     team_stats = db.query(models.StatsSheet.home_team).filter(
-        models.StatsSheet.home_team == "Barcelona"
+        models.StatsSheet.home_team == "Team One"
     )
+    if not team_stats:
+        raise HTTPException(status_code=404, detail="Team data not found")
     return team_stats
+
+
+def get_leaderboard_of_a_team(team_name, db: Session):
+    leaderboard_of_team = (
+        db.query(models.LeaderBoard)
+        .filter(models.LeaderBoard.team == team_name)
+        .first()
+    )
+    if not leaderboard_of_team:
+        raise HTTPException(status_code=404, detail="Team data not found")
+    return leaderboard_of_team
