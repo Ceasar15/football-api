@@ -18,15 +18,15 @@ def create_stats_per_game(request: schema.StatsSheetSchema, db: Session):
     # check if teams exists in db
     home_team_leaderboard = (
         db.query(models.LeaderBoard)
-        .filter(models.LeaderBoard.team == request.home_team)
-        .first()
+            .filter(models.LeaderBoard.team == request.home_team)
+            .first()
     )
     if not home_team_leaderboard:
         raise HTTPException(status_code=404, detail="Home Team data not found")
     away_team_leaderboard = (
         db.query(models.LeaderBoard)
-        .filter(models.LeaderBoard.team == request.away_team)
-        .first()
+            .filter(models.LeaderBoard.team == request.away_team)
+            .first()
     )
     if not away_team_leaderboard:
         raise HTTPException(status_code=404, detail="Away Team data not found")
@@ -77,10 +77,10 @@ def create_stats_per_game(request: schema.StatsSheetSchema, db: Session):
     db.commit()
     db.refresh(home_team_leaderboard)
     home_team_leaderboard.goals_difference = (
-        home_team_leaderboard.goals_for - home_team_leaderboard.goals_against
+            home_team_leaderboard.goals_for - home_team_leaderboard.goals_against
     )
     away_team_leaderboard.goals_difference = (
-        away_team_leaderboard.goals_for - away_team_leaderboard.goals_against
+            away_team_leaderboard.goals_for - away_team_leaderboard.goals_against
     )
     db.add_all([home_team_leaderboard, away_team_leaderboard])
     db.commit()
@@ -97,7 +97,7 @@ def get_all_stats(db: Session):
 def get_game_stats_of_a_team(db: Session):
     team_stats = db.query(models.StatsSheet.home_team).filter(
         models.StatsSheet.home_team == "Team One"
-    )
+    ).first()
     if not team_stats:
         raise HTTPException(status_code=404, detail="Team data not found")
     return team_stats
@@ -106,8 +106,8 @@ def get_game_stats_of_a_team(db: Session):
 def get_leaderboard_of_a_team(team_name, db: Session):
     leaderboard_of_team = (
         db.query(models.LeaderBoard)
-        .filter(models.LeaderBoard.team == team_name)
-        .first()
+            .filter(models.LeaderBoard.team == team_name)
+            .first()
     )
     if not leaderboard_of_team:
         raise HTTPException(status_code=404, detail="Team data not found")

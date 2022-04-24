@@ -1,4 +1,3 @@
-from typing import List
 from pydantic import BaseModel
 
 
@@ -47,8 +46,9 @@ class StatsSheetSchema(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ShowStatsSheet(BaseModel):
     home_team: str
 
     class Config:
-        orm_mode=True
+        orm_mode = True
