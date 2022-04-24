@@ -10,7 +10,7 @@ class UserBase(BaseModel):
 
 
 class User(UserBase):
-    class Config():
+    class Config:
         orm_mode = True
 
 
@@ -19,10 +19,14 @@ class LeaderBoardBase(BaseModel):
     team: str
     played: int
     won: int
+    draw: int
     lose: int
+    goals_for: int
+    goals_against: int
+    goals_difference: int
     points: int
 
-    class Config():
+    class Config:
         orm_mode = True
 
 
@@ -40,5 +44,11 @@ class StatsSheetSchema(BaseModel):
     home_team_red_cards: int
     away_team_red_cards: int
 
-    class Config():
+    class Config:
         orm_mode = True
+
+class ShowStatsSheet(BaseModel):
+    home_team: str
+
+    class Config:
+        orm_mode=True

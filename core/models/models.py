@@ -1,6 +1,11 @@
-from core.database.database import Base, engine
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+from core.database.database import Base, engine
+
+Base = declarative_base()
+metadata = Base.metadata
+
 
 
 class User(Base):
@@ -10,6 +15,10 @@ class User(Base):
     nickname = Column(String)
     is_active = Column(Boolean, default=True)
 
+    def __repr__(self):
+        return 'name: {}, nickname: {}'.format(self.name, self.nickname)
+
+
 
 class LeaderBoard(Base):
     __tablename__ = "leaderboard"
@@ -17,7 +26,11 @@ class LeaderBoard(Base):
     team = Column(String)
     played = Column(Integer)
     won = Column(Integer)
+    draw = Column(Integer)
     lose = Column(Integer)
+    goals_for = Column(Integer)
+    goals_against = Column(Integer)
+    goals_difference = Column(Integer)
     points = Column(Integer)
 
 
@@ -38,4 +51,4 @@ class StatsSheet(Base):
     away_team_red_cards = Column(Integer)
 
 
-Base.metadata.create_all(engine, Base.metadata.tables.values(), checkfirst=True)
+# Base.metadata.create_all(engine, Base.metadata.tables.values(), checkfirst=True)

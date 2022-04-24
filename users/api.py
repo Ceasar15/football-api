@@ -8,11 +8,23 @@ from typing import List
 router = APIRouter(tags=["users"], prefix="/users")
 
 # Create User
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema.User)
+@router.post(
+    "/create_user", status_code=status.HTTP_201_CREATED, response_model=schema.User
+)
 def create_user(request: schema.User, db: Session = Depends(get_db)):
     return user.create(request, db)
 
+
 # Get Users
-@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schema.User])
+@router.get(
+    "/get_all_users", status_code=status.HTTP_200_OK, response_model=List[schema.User]
+)
 def get_users(db: Session = Depends(get_db)):
     return user.get_all(db)
+
+
+@router.get(
+    "/get_user_by_id/{id}", status_code=status.HTTP_200_OK, response_model=schema.User
+)
+def get_user_by_id(id: int, db: Session = Depends(get_db)):
+    return user.get_user_by_id(id, db)

@@ -1,22 +1,26 @@
+from fastapi.responses import HTMLResponse
 from fastapi import FastAPI
 from typing import Optional
 from api.endpoints import endpoint
 from users import api
 
-
-
-
 app = FastAPI()
 app.include_router(endpoint.router)
 app.include_router(api.router)
 
+@app.get("/", response_class=HTMLResponse)
+def index():
+    return """
+<!Doctype html>
+    <html>
+        <body>
+            <h1>Football API Leaderboard</h1>
+            <div class="btn-group">
+                <a href="/docs"><button>SwaggerUI</button></a>
+                <a href="/redoc"><button>Redoc</button></a>
+            </div>
+        </body>
+    </html>
+"""
 
-@app.get("/")
-def home():
-    return {"getting": "started"}
 
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
