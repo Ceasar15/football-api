@@ -1,20 +1,19 @@
 import pytest
 import os
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy_utils import create_database
-from sqlalchemy_utils import database_exists
 from sqlalchemy.orm import sessionmaker
-from core.database.database import get_db, Base
-from core.models.models import User
+from core.database.database import get_db
 from main import app
+from core.models.models import Base
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.getenv("TEST_SQLALCHEMY_DATABASE_URL")
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL
+    SQLALCHEMY_DATABASE_URL, echo=True
 )
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
 def override_get_db():
