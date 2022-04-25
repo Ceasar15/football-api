@@ -41,7 +41,7 @@ def update_stats_of_game(game_id, request: schema.StatsSheetSchema, db: Session 
 
 
 # delete stats of a game
-@router.post("/delete-stats-of-game", status_code=status.HTTP_200_OK)
+@router.delete("/delete-stats-of-game", status_code=status.HTTP_200_OK)
 def delete_stats_of_game(game_id: int, db: Session = Depends(get_db)):
     return api.delete_stats_per_game(game_id, db)
 
