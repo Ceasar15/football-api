@@ -11,7 +11,7 @@ TEAM_DATA_NOT_FOUND = "Team data not found"
 def get_leaderboard(db: Session):
     leaderboard = db.query(models.LeaderBoard).all()
     leaderboard.sort(
-        key=lambda x: (str(x.points), str(x.goals_difference), str(x.goals_for), str(x.team))
+        key=lambda x: (x.points, x.goals_difference, x.goals_for), reverse=True
     )
     return leaderboard
 
