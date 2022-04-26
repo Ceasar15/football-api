@@ -1,12 +1,12 @@
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI
-from typing import Optional
 from api.endpoints import endpoint
 from users import api
 
 app = FastAPI()
 app.include_router(endpoint.router)
 app.include_router(api.router)
+
 
 @app.get("/", response_class=HTMLResponse)
 def index():
@@ -24,3 +24,5 @@ def index():
 """
 
 
+# if __name__ == '__main__':
+#     app()

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from core.database.database import get_db
 from core.schemas import schema
@@ -6,6 +6,7 @@ from users.endpoints import user
 from typing import List
 
 router = APIRouter(tags=["users"], prefix="/users")
+
 
 # Create User
 @router.post(

@@ -1,12 +1,13 @@
+import os
+import sys
 from logging.config import fileConfig
 
+from alembic import context
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from alembic import context
-
-import os, sys
-from dotenv import load_dotenv
+from core.models.models import Base
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -29,9 +30,9 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from core.models.models import Base
 
-target_metadata = [Base.metadata]
+target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
