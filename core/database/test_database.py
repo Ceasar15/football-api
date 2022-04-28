@@ -2,7 +2,7 @@ import pytest
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database import get_db
+from .database import get_db
 from main import app
 from core.models.models import Base
 from dotenv import load_dotenv
@@ -28,7 +28,7 @@ def override_get_db():
 def test_db():
     Base.metadata.create_all(bind=engine)
     yield
-    Base.metadata.drop_all(bind=engine)
+    # Base.metadata.drop_all(bind=engine)
 
 
 app.dependency_overrides[get_db] = override_get_db
